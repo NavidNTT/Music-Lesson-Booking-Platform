@@ -15,5 +15,16 @@ Route::prefix('v1')
 
             Route::get('/me', [AuthController::class, 'me'])->name('me');
             Route::patch('/me', [ProfileController::class, 'update'])->name('me.update');
-        });
+            Route::middleware(['auth:sanctum', 'role:admin'])
+                ->prefix('admin')
+                ->name('admin.')
+                ->group(function () {
+                    Route::apiResource('instruments', \App\Http\Controllers\Api\V1\Admin\InstrumentController::class);
+                });
+            
+            // Public/Student Routes
+            Route::get('instruments', [\App\Http\Controllers\Api\V1\Admin\InstrumentController::class, 'index']);
+            });
     });
+    // Admin Routes
+
