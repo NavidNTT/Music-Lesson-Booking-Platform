@@ -3,31 +3,48 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Api\V1\Admin\InstrumentRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Instrument;
+
 class InstrumentController extends Controller
 {
+    use ApiResponse;
+
     public function index()
     {
-        return response()->json(['data' => Instrument::all()]);
+        return $this->success(data: Instrument::paginate(20));
     }
 
     public function store(InstrumentRequest $request)
     {
         $instrument = Instrument::create($request->validated());
-        return response()->json(['message' => 'Instrument created', 'data' => $instrument], 201);
+
+        return $this->created(
+            data: $instrument,
+            message: 'Instrument created.'
+        );
+    }
+
+    public function show(Instrument $instrument)
+    {
+        return $this->success(data: $instrument);
     }
 
     public function update(InstrumentRequest $request, Instrument $instrument)
     {
         $instrument->update($request->validated());
-        return response()->json(['message' => 'Instrument updated', 'data' => $instrument]);
+
+        return $this->success(
+            data: $instrument,
+            message: 'Instrument updated.'
+        );
     }
 
     public function destroy(Instrument $instrument)
     {
         $instrument->delete();
-        return response()->json(['message' => 'Instrument deleted']);
+
+        return $this->success(message: 'Instrument deleted.');
     }
 }

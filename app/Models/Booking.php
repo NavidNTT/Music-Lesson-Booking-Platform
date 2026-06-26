@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BookingStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,17 +18,20 @@ class Booking extends Model
         'teacher_time_slot_id',
         'status',
         'price_amount',
-        'amount',
         'confirmed_at',
         'cancelled_at',
         'cancellation_reason',
     ];
 
-    protected $casts = [
-        'price_amount' => 'decimal:2',
-        'confirmed_at' => 'datetime',
-        'cancelled_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'price_amount' => 'decimal:2',
+            'confirmed_at' => 'datetime',
+            'cancelled_at' => 'datetime',
+            'status' => BookingStatus::class,
+        ];
+    }
 
     public function teacherProfile(): BelongsTo
     {
@@ -54,8 +58,8 @@ class Booking extends Model
         return $this->price_amount;
     }
 
-    public function setAmountAttribute(mixed $value): void
+    public function canTransitionTo(BookingStatus $target): bool
     {
-        $this->attributes['price_amount'] = $value;
+        return $this->status->canTransitionTo($target);
     }
 }

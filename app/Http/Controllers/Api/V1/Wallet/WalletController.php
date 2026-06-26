@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Api\V1\Wallet;
 
 use App\Http\Controllers\Controller;
+use App\Http\Responses\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
-    public function me(Request $request)
+    use ApiResponse;
+
+    public function me(Request $request): JsonResponse
     {
         $wallet = $request->user()->wallet()->with('transactions')->first();
 
-        return response()->json([
-            'data' => $wallet,
-        ]);
+        return $this->success(data: $wallet);
     }
 }

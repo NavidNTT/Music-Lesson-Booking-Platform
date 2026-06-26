@@ -2,51 +2,96 @@
 
 namespace App\Http\Controllers\Api\V1\Booking;
 
-use App\Http\Controllers\Controller;
-use App\Models\Booking;
 use App\Domain\Booking\Services\BookingService;
+use App\Http\Controllers\Controller;
+use App\Http\Responses\ApiResponse;
+use App\Models\Booking;
 use Illuminate\Http\JsonResponse;
 
 class TeacherBookingController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         protected BookingService $bookingService
     ) {}
 
-    /**
-     * لیست رزروهای مربوط به این مدرس
-     */
     public function index(): JsonResponse
     {
-        $bookings = Booking::where('teacher_profile_id', auth()->user()->teacherProfile->id)
-            ->with(['studentProfile.user', 'instrument'])
-            ->latest()
-            ->get();
+        $profile = auth()->user()->teacherProfile;
 
-        return response()->json(['data' => $bookings]);
+        if (!$profile) {
+            return $this->notFound('Teacher profile not found.');
+        }
+
+        $bookings = Booking::where('teacher_profile_id', $profile->id)
+            ->with(['studentProfile.user', 'timeSlot'])
+            ->latest()
+            ->paginate(20);
+
+        return $this->success(data: $bookings);
     }
 
-    /**
-     * تایید رزرو و کسر وجه از هنرجو
-     */
     public function confirm(Booking $booking): JsonResponse
     {
-        // امنیتی: مطمئن شو این رزرو مال همین مدرس هست
-        if ($booking->teacher_profile_id !== auth()->user()->teacherProfile->id) {
-            return response()->json(['message' => 'Unauthorized.'], 403);
+        $profile = auth()->user()->teacherProfile;
+
+        if (!$profile || $booking->teacher_profile_id !== $profile->id) {
+            return $this->forbidden('Unauthorized.');
         }
 
         try {
             $confirmedBooking = $this->bookingService->confirmBooking($booking);
 
-            return response()->json([
-                'message' => 'Booking confirmed and payment successful.',
-                'data' => $confirmedBooking
-            ]);
+            return $this->success(
+                data: $confirmedBooking,
+                message: 'Booking confirmed and payment successful.'
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function complete(Booking $booking): JsonResponse
+    {
+        $profile = auth()->user()->teacherProfile;
+
+        if (!$profile || $booking->teacher_profile_id !== $profile->id) {
+            return $this->forbidden('Unauthorized.');
+        }
+
+        try {
+            $completedBooking = $this->bookingService->completeBooking($booking);
+
+            return $this->success(
+                data: $completedBooking,
+                message: 'Booking completed successfully.'
+            );
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function cancel(Booking $booking): JsonResponse
+    {
+        $profile = auth()->user()->teacherProfile;
+
+        if (!$profile || $booking->teacher_profile_id !== $profile->id) {
+            return $this->forbidden('Unauthorized.');
+        }
+
+        try {
+            $cancelledBooking = $this->bookingService->cancelBooking(
+                $booking,
+                request()->input('reason', 'Cancelled by teacher.')
+            );
+
+            return $this->success(
+                data: $cancelledBooking,
+                message: 'Booking cancelled successfully.'
+            );
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
         }
     }
 }

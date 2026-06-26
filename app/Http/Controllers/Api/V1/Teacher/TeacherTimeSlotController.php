@@ -6,33 +6,31 @@ use App\Domain\Teacher\Services\TeacherTimeSlotService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Teacher\StoreTeacherTimeSlotRequest;
 use App\Http\Requests\Api\V1\Teacher\UpdateTeacherTimeSlotRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\TeacherTimeSlot;
 use Illuminate\Http\JsonResponse;
 
 class TeacherTimeSlotController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         private readonly TeacherTimeSlotService $teacherTimeSlotService
-    ) {
-    }
+    ) {}
 
     public function index(): JsonResponse
     {
         $profile = auth()->user()->teacherProfile;
 
         if (! $profile) {
-            return response()->json([
-                'message' => 'Teacher profile not found. Please create your profile first.',
-            ], 404);
+            return $this->notFound('Teacher profile not found. Please create your profile first.');
         }
 
         $slots = $profile->timeSlots()
             ->orderBy('starts_at')
-            ->get();
+            ->paginate(20);
 
-        return response()->json([
-            'data' => $slots,
-        ]);
+        return $this->success(data: $slots);
     }
 
     public function store(StoreTeacherTimeSlotRequest $request): JsonResponse
@@ -40,9 +38,7 @@ class TeacherTimeSlotController extends Controller
         $profile = $request->user()->teacherProfile;
 
         if (! $profile) {
-            return response()->json([
-                'message' => 'Teacher profile not found. Please create your profile first.',
-            ], 404);
+            return $this->notFound('Teacher profile not found. Please create your profile first.');
         }
 
         $slot = $this->teacherTimeSlotService->create(
@@ -50,19 +46,17 @@ class TeacherTimeSlotController extends Controller
             $request->validated()
         );
 
-        return response()->json([
-            'message' => 'Time slot created successfully.',
-            'data' => $slot,
-        ], 201);
+        return $this->created(
+            data: $slot,
+            message: 'Time slot created successfully.'
+        );
     }
 
     public function show(TeacherTimeSlot $slot): JsonResponse
     {
         $this->ensureOwnsSlot($slot);
 
-        return response()->json([
-            'data' => $slot,
-        ]);
+        return $this->success(data: $slot);
     }
 
     public function update(UpdateTeacherTimeSlotRequest $request, TeacherTimeSlot $slot): JsonResponse
@@ -74,10 +68,10 @@ class TeacherTimeSlotController extends Controller
             $request->validated()
         );
 
-        return response()->json([
-            'message' => 'Time slot updated successfully.',
-            'data' => $slot,
-        ]);
+        return $this->success(
+            data: $slot,
+            message: 'Time slot updated successfully.'
+        );
     }
 
     public function destroy(TeacherTimeSlot $slot): JsonResponse
@@ -85,16 +79,12 @@ class TeacherTimeSlotController extends Controller
         $this->ensureOwnsSlot($slot);
 
         if ($slot->booked_count > 0) {
-            return response()->json([
-                'message' => 'Cannot delete a slot that already has bookings.',
-            ], 422);
+            return $this->error('Cannot delete a slot that already has bookings.');
         }
 
         $slot->delete();
 
-        return response()->json([
-            'message' => 'Time slot deleted successfully.',
-        ]);
+        return $this->success(message: 'Time slot deleted successfully.');
     }
 
     private function ensureOwnsSlot(TeacherTimeSlot $slot): void

@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api\V1\Review;
 use App\Domain\Review\Services\ReviewService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Review\StoreReviewRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Booking;
 use Illuminate\Http\JsonResponse;
 
 class ReviewController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         protected ReviewService $reviewService
     ) {}
@@ -19,9 +22,7 @@ class ReviewController extends Controller
         $user = $request->user();
 
         if (! $user->studentProfile) {
-            return response()->json([
-                'message' => 'Student profile not found.',
-            ], 403);
+            return $this->forbidden('Student profile not found.');
         }
 
         $booking = Booking::query()
@@ -30,9 +31,7 @@ class ReviewController extends Controller
             ->first();
 
         if (! $booking) {
-            return response()->json([
-                'message' => 'Booking not found or unauthorized.',
-            ], 404);
+            return $this->notFound('Booking not found or unauthorized.');
         }
 
         $review = $this->reviewService->storeReview(
@@ -41,9 +40,9 @@ class ReviewController extends Controller
             $request->input('comment')
         );
 
-        return response()->json([
-            'message' => 'Review submitted successfully.',
-            'data' => $review,
-        ], 201);
+        return $this->created(
+            data: $review,
+            message: 'Review submitted successfully.'
+        );
     }
 }

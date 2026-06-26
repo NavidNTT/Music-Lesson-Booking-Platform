@@ -3,7 +3,6 @@
 namespace Tests\Feature\Wallet;
 
 use App\Enums\UserRole;
-use App\Models\StudentProfile;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,17 +18,13 @@ class WalletTest extends TestCase
             'role' => UserRole::Student,
         ]);
 
-        $studentProfile = StudentProfile::factory()->create([
-            'user_id' => $student->id,
-        ]);
-
         Wallet::factory()->create([
-            'student_profile_id' => $studentProfile->id,
+            'user_id' => $student->id,
             'balance' => 0,
         ]);
 
         $this->assertDatabaseHas('wallets', [
-            'student_profile_id' => $studentProfile->id,
+            'user_id' => $student->id,
         ]);
     }
 
@@ -39,12 +34,8 @@ class WalletTest extends TestCase
             'role' => UserRole::Student,
         ]);
 
-        $studentProfile = StudentProfile::factory()->create([
-            'user_id' => $student->id,
-        ]);
-
         $wallet = Wallet::factory()->create([
-            'student_profile_id' => $studentProfile->id,
+            'user_id' => $student->id,
             'balance' => 100000,
         ]);
 

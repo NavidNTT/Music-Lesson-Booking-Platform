@@ -15,6 +15,7 @@ class UpdateTeacherTimeSlotRequest extends FormRequest
     {
         return [
             'starts_at' => ['sometimes', 'date', 'after:now'],
+            'duration_minutes' => ['sometimes', 'integer', 'min:15', 'max:480'],
             'capacity' => ['sometimes', 'integer', 'min:1', 'max:10'],
             'is_enabled' => ['sometimes', 'boolean'],
         ];

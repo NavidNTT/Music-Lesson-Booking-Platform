@@ -110,11 +110,16 @@ class TeacherProfileTest extends TestCase
         'user_id' => $studentUser->id,
     ]);
 
+    $slot = \App\Models\TeacherTimeSlot::factory()->create([
+        'teacher_profile_id' => $teacherProfile->id,
+    ]);
+
     $booking = Booking::factory()->create([
         'teacher_profile_id' => $teacherProfile->id,
         'student_profile_id' => $studentProfile->id,
+        'teacher_time_slot_id' => $slot->id,
         'status' => 'pending',
-        'amount' => 400000,
+        'price_amount' => 400000,
     ]);
 
     $response = $this->actingAs($otherTeacher, 'sanctum')

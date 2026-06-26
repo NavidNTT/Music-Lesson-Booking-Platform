@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Enums\UserRole;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -49,16 +50,19 @@ class User extends Authenticatable
     {
         return $this->role === UserRole::Student;
     }
+
     public function teacherProfile()
-{
-    return $this->hasOne(TeacherProfile::class);
-}
-public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
-{
-    return $this->hasOne(StudentProfile::class);
-}
-public function wallet(): \Illuminate\Database\Eloquent\Relations\HasOne
-{
-    return $this->hasOne(Wallet::class);
-}
+    {
+        return $this->hasOne(TeacherProfile::class);
+    }
+
+    public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(StudentProfile::class);
+    }
+
+    public function wallet(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
 }

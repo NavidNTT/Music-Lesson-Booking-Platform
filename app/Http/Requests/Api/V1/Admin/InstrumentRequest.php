@@ -2,17 +2,15 @@
 
 namespace App\Http\Requests\Api\V1\Admin;
 
+use App\Enums\UserRole;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InstrumentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->role === UserRole::Admin;
     }
 
     /**

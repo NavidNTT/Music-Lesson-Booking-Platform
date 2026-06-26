@@ -70,4 +70,22 @@ class WalletService
             ]);
         });
     }
+
+    public function refundForCancelledBooking(User $user, float $amount, int $bookingId): void
+    {
+        DB::transaction(function () use ($user, $amount, $bookingId) {
+            $wallet = $user->wallet()->lockForUpdate()->firstOrFail();
+
+            $wallet->increment('balance', $amount);
+
+            $wallet->transactions()->create([
+                'type' => 'refund',
+                'amount' => $amount,
+                'reference_type' => 'Booking',
+                'reference_id' => $bookingId,
+                'status' => 'success',
+                'description' => 'Refund for cancelled booking #' . $bookingId,
+            ]);
+        });
+    }
 }

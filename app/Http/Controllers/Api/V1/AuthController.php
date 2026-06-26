@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
 use App\Http\Resources\Api\V1\UserResource;
+use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    use ApiResponse;
+
     public function register(RegisterRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -24,19 +27,19 @@ class AuthController extends Controller
             'password' => $validated['password'],
             'role' => $validated['role'] ?? UserRole::Student,
         ]);
-         $user->wallet()->create([
-    'balance' => 0,
-             ]);
+
+        $user->wallet()->create(['balance' => 0]);
+
         $token = $user->createToken($request->input('device_name', 'api-token'))->plainTextToken;
 
-        return response()->json([
-            'message' => 'Registered successfully.',
-            'data' => [
+        return $this->created(
+            data: [
                 'user' => new UserResource($user),
                 'token' => $token,
                 'token_type' => 'Bearer',
             ],
-        ], 201);
+            message: 'Registered successfully.'
+        );
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -44,41 +47,32 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! Auth::attempt($credentials)) {
-            return response()->json([
-                'message' => 'Invalid credentials.',
-            ], 422);
+            return $this->error('Invalid credentials.', 422);
         }
 
-        /** @var User $user */
         $user = Auth::user();
 
         $token = $user->createToken($request->input('device_name', 'api-token'))->plainTextToken;
 
-        return response()->json([
-            'message' => 'Logged in successfully.',
-            'data' => [
+        return $this->success(
+            data: [
                 'user' => new UserResource($user),
                 'token' => $token,
                 'token_type' => 'Bearer',
             ],
-        ]);
+            message: 'Logged in successfully.'
+        );
     }
 
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()?->delete();
 
-        return response()->json([
-            'message' => 'Logged out successfully.',
-        ]);
+        return $this->success(message: 'Logged out successfully.');
     }
 
     public function me(Request $request): JsonResponse
     {
-        return response()->json([
-            'data' => [
-                'user' => new UserResource($request->user()),
-            ],
-        ]);
+        return $this->success(data: ['user' => new UserResource($request->user())]);
     }
 }

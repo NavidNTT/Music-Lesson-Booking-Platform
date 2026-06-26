@@ -9,12 +9,13 @@ use Illuminate\Validation\ValidationException;
 
 class TeacherTimeSlotService
 {
-    private const SESSION_DURATION_MINUTES = 60;
+    private const DEFAULT_DURATION_MINUTES = 60;
 
     public function create(TeacherProfile $teacherProfile, array $data): TeacherTimeSlot
     {
         $startsAt = CarbonImmutable::parse($data['starts_at']);
-        $endsAt = $startsAt->addMinutes(self::SESSION_DURATION_MINUTES);
+        $duration = $data['duration_minutes'] ?? self::DEFAULT_DURATION_MINUTES;
+        $endsAt = $startsAt->addMinutes((int) $duration);
 
         $this->ensureNoOverlap($teacherProfile, $startsAt, $endsAt);
 
@@ -32,7 +33,8 @@ class TeacherTimeSlotService
             ? CarbonImmutable::parse($data['starts_at'])
             : CarbonImmutable::parse($slot->starts_at);
 
-        $endsAt = $startsAt->addMinutes(self::SESSION_DURATION_MINUTES);
+        $duration = $data['duration_minutes'] ?? self::DEFAULT_DURATION_MINUTES;
+        $endsAt = $startsAt->addMinutes((int) $duration);
 
         $this->ensureNoOverlap(
             $slot->teacherProfile,

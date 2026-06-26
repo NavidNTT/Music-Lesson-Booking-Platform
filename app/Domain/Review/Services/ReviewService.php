@@ -2,6 +2,8 @@
 
 namespace App\Domain\Review\Services;
 
+use App\Enums\BookingStatus;
+use App\Jobs\RecalculateTeacherRating;
 use App\Models\Booking;
 use App\Models\Review;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +19,7 @@ class ReviewService
                 ->with(['teacherProfile', 'studentProfile', 'review'])
                 ->firstOrFail();
 
-            if ($booking->status !== 'completed') {
+            if ($booking->status !== BookingStatus::Completed) {
                 throw ValidationException::withMessages([
                     'booking' => 'Only completed bookings can be reviewed.',
                 ]);
@@ -43,7 +45,6 @@ class ReviewService
                 'comment' => $comment,
             ]);
 
-            // بعد از ثبت review، rating مدرس را به‌روزرسانی می‌کنیم
             $this->recalculateTeacherRating($booking->teacherProfile);
 
             return $review;
