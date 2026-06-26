@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\TeacherTimeSlot;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class TeacherProfile extends Model
 {
     use HasFactory;
@@ -38,5 +39,9 @@ class TeacherProfile extends Model
     public function timeSlots()
 {
     return $this->hasMany(TeacherTimeSlot::class);
+}
+public function reviews(): HasMany
+{
+    return $this->hasMany(Review::class);
 }
 }

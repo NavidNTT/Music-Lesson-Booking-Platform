@@ -12,6 +12,7 @@ class InstrumentTest extends TestCase
     /**
      * A basic feature test example.
      */
+    use RefreshDatabase;
 public function test_only_admin_can_create_instrument()
 {
     $student = User::factory()->create(['role' => UserRole::Student]);

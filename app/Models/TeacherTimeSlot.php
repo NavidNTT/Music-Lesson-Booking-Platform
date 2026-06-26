@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TeacherTimeSlot extends Model
 {
@@ -29,9 +31,14 @@ class TeacherTimeSlot extends Model
         ];
     }
 
-    public function teacherProfile()
+    public function teacherProfile(): BelongsTo
     {
         return $this->belongsTo(TeacherProfile::class);
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class, 'teacher_time_slot_id');
     }
 
     public function getAvailableSeatsAttribute(): int

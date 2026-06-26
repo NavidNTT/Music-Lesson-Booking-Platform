@@ -42,4 +42,33 @@ class BookingService
             return $booking;
         });
     }
+    public function confirmBooking(Booking $booking): Booking
+{
+    return DB::transaction(function () use ($booking) {
+        $booking = Booking::whereKey($booking->id)->lockForUpdate()->firstOrFail();
+
+        if ($booking->status !== 'pending') {
+            throw ValidationException::withMessages([
+                'booking' => 'Only pending bookings can be confirmed.',
+            ]);
+        }
+
+        $student = $booking->studentProfile->user;
+
+        app(\App\Domain\Wallet\Services\WalletService::class)
+            ->payForBooking(
+                $student,
+                (float) $booking->price_amount,
+                $booking->id
+            );
+
+        $booking->update([
+            'status' => 'confirmed',
+            'confirmed_at' => now(),
+        ]);
+
+        return $booking->fresh();
+    });
+}
+
 }

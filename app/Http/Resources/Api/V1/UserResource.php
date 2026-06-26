@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\Api\V1;
 
+use BackedEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 /**
  * @mixin \App\Models\User
  */
@@ -15,7 +17,9 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role' => $this->role->value,
+            'role' => $this->role instanceof BackedEnum
+                ? $this->role->value
+                : $this->role,
             'created_at' => $this->created_at?->toISOString(),
         ];
     }

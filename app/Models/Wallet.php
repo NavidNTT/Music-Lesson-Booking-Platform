@@ -1,20 +1,21 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class StudentProfile extends Model
+class Wallet extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'user_id',
-        'bio',
-        'phone_number',
+        'balance',
+    ];
+
+    protected $casts = [
+        'balance' => 'decimal:2',
     ];
 
     public function user(): BelongsTo
@@ -22,13 +23,8 @@ class StudentProfile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function bookings(): HasMany
+    public function transactions(): HasMany
     {
-        return $this->hasMany(Booking::class);
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(WalletTransaction::class);
     }
 }

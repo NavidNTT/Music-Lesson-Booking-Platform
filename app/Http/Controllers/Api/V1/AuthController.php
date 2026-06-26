@@ -24,7 +24,9 @@ class AuthController extends Controller
             'password' => $validated['password'],
             'role' => $validated['role'] ?? UserRole::Student,
         ]);
-
+         $user->wallet()->create([
+    'balance' => 0,
+             ]);
         $token = $user->createToken($request->input('device_name', 'api-token'))->plainTextToken;
 
         return response()->json([

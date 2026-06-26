@@ -57,4 +57,8 @@ public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
 {
     return $this->hasOne(StudentProfile::class);
 }
+public function wallet(): \Illuminate\Database\Eloquent\Relations\HasOne
+{
+    return $this->hasOne(Wallet::class);
+}
 }
