@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Teacher\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Domain\Instrument\Models\Instrument;
+use App\Domain\Review\Models\Review;
+use App\Domain\User\Models\User;
+use Database\Factories\TeacherProfileFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +16,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class TeacherProfile extends Model
 {
     use HasFactory;
+
+    protected static function newFactory(): Factory
+    {
+        return TeacherProfileFactory::new();
+    }
 
     protected $fillable = [
         'user_id',

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\TeacherProfile;
-use App\Models\User;
+use App\Domain\Teacher\Models\TeacherProfile;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TeacherProfileFactory extends Factory

@@ -1,7 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Student\Models;
 
+use App\Domain\Booking\Models\Booking;
+use App\Domain\Review\Models\Review;
+use App\Domain\User\Models\User;
+use Database\Factories\StudentProfileFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +15,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class StudentProfile extends Model
 {
     use HasFactory;
+
+    protected static function newFactory(): Factory
+    {
+        return StudentProfileFactory::new();
+    }
 
     protected $fillable = [
         'user_id',

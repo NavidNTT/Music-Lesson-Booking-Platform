@@ -4,8 +4,8 @@ namespace App\Domain\Review\Services;
 
 use App\Enums\BookingStatus;
 use App\Jobs\RecalculateTeacherRating;
-use App\Models\Booking;
-use App\Models\Review;
+use App\Domain\Booking\Models\Booking;
+use App\Domain\Review\Models\Review;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 

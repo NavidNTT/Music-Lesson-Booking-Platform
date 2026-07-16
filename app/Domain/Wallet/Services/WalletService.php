@@ -2,8 +2,8 @@
 
 namespace App\Domain\Wallet\Services;
 
-use App\Models\User;
-use App\Models\WalletTransaction;
+use App\Domain\User\Models\User;
+use App\Domain\Wallet\Models\WalletTransaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 

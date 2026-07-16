@@ -6,8 +6,9 @@ use App\Domain\Teacher\Services\TeacherTimeSlotService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Teacher\StoreTeacherTimeSlotRequest;
 use App\Http\Requests\Api\V1\Teacher\UpdateTeacherTimeSlotRequest;
+use App\Http\Resources\Api\V1\TimeSlotResource;
 use App\Http\Responses\ApiResponse;
-use App\Models\TeacherTimeSlot;
+use App\Domain\Teacher\Models\TeacherTimeSlot;
 use Illuminate\Http\JsonResponse;
 
 class TeacherTimeSlotController extends Controller
@@ -47,7 +48,7 @@ class TeacherTimeSlotController extends Controller
         );
 
         return $this->created(
-            data: $slot,
+            data: new TimeSlotResource($slot),
             message: 'Time slot created successfully.'
         );
     }
@@ -56,7 +57,7 @@ class TeacherTimeSlotController extends Controller
     {
         $this->ensureOwnsSlot($slot);
 
-        return $this->success(data: $slot);
+        return $this->success(data: new TimeSlotResource($slot));
     }
 
     public function update(UpdateTeacherTimeSlotRequest $request, TeacherTimeSlot $slot): JsonResponse
@@ -69,7 +70,7 @@ class TeacherTimeSlotController extends Controller
         );
 
         return $this->success(
-            data: $slot,
+            data: new TimeSlotResource($slot),
             message: 'Time slot updated successfully.'
         );
     }

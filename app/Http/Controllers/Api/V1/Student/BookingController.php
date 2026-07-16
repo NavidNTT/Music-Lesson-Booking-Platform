@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Student;
 
 use App\Domain\Booking\Services\BookingService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\BookingResource;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class BookingController extends Controller
         );
 
         return $this->created(
-            data: $booking,
+            data: new BookingResource($booking),
             message: 'Booking request sent successfully. Waiting for teacher confirmation.'
         );
     }

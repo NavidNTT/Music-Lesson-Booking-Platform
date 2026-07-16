@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Teacher\UpdateTeacherProfileRequest;
 use App\Http\Requests\Api\V1\Teacher\SyncTeacherInstrumentsRequest;
+use App\Http\Resources\Api\V1\TeacherProfileResource;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
@@ -16,14 +17,14 @@ class TeacherProfileController extends Controller
     {
         $profile = auth()->user()
             ->teacherProfile()
-            ->with('instruments')
+            ->with(['instruments', 'timeSlots'])
             ->first();
 
         if (!$profile) {
             return $this->notFound('Profile not found.');
         }
 
-        return $this->success(data: $profile);
+        return $this->success(data: new TeacherProfileResource($profile));
     }
 
     public function update(UpdateTeacherProfileRequest $request): JsonResponse
@@ -36,7 +37,7 @@ class TeacherProfileController extends Controller
         );
 
         return $this->success(
-            data: $profile,
+            data: new TeacherProfileResource($profile->fresh()->load(['instruments', 'timeSlots'])),
             message: 'Profile updated successfully.'
         );
     }
@@ -60,7 +61,7 @@ class TeacherProfileController extends Controller
         $profile->instruments()->sync($syncData);
 
         return $this->success(
-            data: $profile->load('instruments'),
+            data: new TeacherProfileResource($profile->fresh()->load(['instruments', 'timeSlots'])),
             message: 'Instruments synced successfully.'
         );
     }

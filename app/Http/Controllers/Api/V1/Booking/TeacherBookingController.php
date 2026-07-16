@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api\V1\Booking;
 
 use App\Domain\Booking\Services\BookingService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\BookingResource;
 use App\Http\Responses\ApiResponse;
-use App\Models\Booking;
+use App\Domain\Booking\Models\Booking;
 use Illuminate\Http\JsonResponse;
 
 class TeacherBookingController extends Controller
@@ -44,7 +45,7 @@ class TeacherBookingController extends Controller
             $confirmedBooking = $this->bookingService->confirmBooking($booking);
 
             return $this->success(
-                data: $confirmedBooking,
+                data: new BookingResource($confirmedBooking),
                 message: 'Booking confirmed and payment successful.'
             );
         } catch (\Exception $e) {
@@ -64,7 +65,7 @@ class TeacherBookingController extends Controller
             $completedBooking = $this->bookingService->completeBooking($booking);
 
             return $this->success(
-                data: $completedBooking,
+                data: new BookingResource($completedBooking),
                 message: 'Booking completed successfully.'
             );
         } catch (\Exception $e) {
@@ -87,7 +88,7 @@ class TeacherBookingController extends Controller
             );
 
             return $this->success(
-                data: $cancelledBooking,
+                data: new BookingResource($cancelledBooking),
                 message: 'Booking cancelled successfully.'
             );
         } catch (\Exception $e) {

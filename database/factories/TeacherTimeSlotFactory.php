@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\TeacherProfile;
-use App\Models\TeacherTimeSlot;
+use App\Domain\Teacher\Models\TeacherProfile;
+use App\Domain\Teacher\Models\TeacherTimeSlot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

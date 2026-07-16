@@ -5,7 +5,7 @@ namespace Tests\Feature\Api\V1\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
+use App\Domain\User\Models\User;
 use App\Enums\UserRole;
 class InstrumentTest extends TestCase
 {

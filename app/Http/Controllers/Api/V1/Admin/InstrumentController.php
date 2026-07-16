@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Admin\InstrumentRequest;
 use App\Http\Responses\ApiResponse;
-use App\Models\Instrument;
+use App\Domain\Instrument\Models\Instrument;
 
 class InstrumentController extends Controller
 {

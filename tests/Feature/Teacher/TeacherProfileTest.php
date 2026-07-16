@@ -2,14 +2,15 @@
 
 namespace Tests\Feature\Teacher;
 
+use App\Domain\Booking\Models\Booking;
+use App\Domain\Instrument\Models\Instrument;
+use App\Domain\Teacher\Models\TeacherProfile;
+use App\Domain\Student\Models\StudentProfile;
+use App\Domain\Teacher\Models\TeacherTimeSlot;
+use App\Domain\User\Models\User;
 use App\Enums\UserRole;
-use App\Models\Instrument;
-use App\Models\TeacherProfile;
-use App\Models\User;
-use App\Models\Booking;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\StudentProfile;
 class TeacherProfileTest extends TestCase
 {
     use RefreshDatabase;
@@ -110,7 +111,7 @@ class TeacherProfileTest extends TestCase
         'user_id' => $studentUser->id,
     ]);
 
-    $slot = \App\Models\TeacherTimeSlot::factory()->create([
+    $slot = TeacherTimeSlot::factory()->create([
         'teacher_profile_id' => $teacherProfile->id,
     ]);
 

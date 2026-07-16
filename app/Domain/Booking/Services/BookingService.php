@@ -4,9 +4,9 @@ namespace App\Domain\Booking\Services;
 
 use App\Domain\Wallet\Services\WalletService;
 use App\Enums\BookingStatus;
-use App\Models\Booking;
-use App\Models\StudentProfile;
-use App\Models\TeacherTimeSlot;
+use App\Domain\Booking\Models\Booking;
+use App\Domain\Student\Models\StudentProfile;
+use App\Domain\Teacher\Models\TeacherTimeSlot;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -121,7 +121,11 @@ class BookingService
                 $this->walletService->refundForCancelledBooking($student, (float) $booking->price_amount, $booking->id);
             }
 
-            $slot = $booking->timeSlot;
+            // Reload the time slot with pessimistic lock to safely decrement booked_count
+            $slot = TeacherTimeSlot::whereKey($booking->teacher_time_slot_id)
+                ->lockForUpdate()
+                ->first();
+
             if ($slot && $slot->booked_count > 0) {
                 $slot->decrement('booked_count');
             }

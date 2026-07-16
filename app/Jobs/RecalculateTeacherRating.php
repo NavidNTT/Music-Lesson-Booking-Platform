@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\Review;
-use App\Models\TeacherProfile;
+use App\Domain\Review\Models\Review;
+use App\Domain\Teacher\Models\TeacherProfile;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;

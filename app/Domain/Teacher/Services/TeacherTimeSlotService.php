@@ -2,8 +2,8 @@
 
 namespace App\Domain\Teacher\Services;
 
-use App\Models\TeacherProfile;
-use App\Models\TeacherTimeSlot;
+use App\Domain\Teacher\Models\TeacherProfile;
+use App\Domain\Teacher\Models\TeacherTimeSlot;
 use Carbon\CarbonImmutable;
 use Illuminate\Validation\ValidationException;
 

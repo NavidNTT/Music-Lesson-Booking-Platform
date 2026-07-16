@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Wallet;
 
+use App\Domain\User\Models\User;
+use App\Domain\Wallet\Models\Wallet;
 use App\Enums\UserRole;
-use App\Models\User;
-use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\User\Models;
 
+use App\Domain\Teacher\Models\TeacherProfile;
+use App\Domain\Student\Models\StudentProfile;
+use App\Domain\Wallet\Models\Wallet;
 use App\Enums\UserRole;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,6 +19,11 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
 
     protected $fillable = [
         'name',
@@ -56,12 +66,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(TeacherProfile::class);
     }
 
-    public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function studentProfile()
     {
         return $this->hasOne(StudentProfile::class);
     }
 
-    public function wallet(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function wallet()
     {
         return $this->hasOne(Wallet::class);
     }

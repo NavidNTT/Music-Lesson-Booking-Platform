@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Domain\Instrument\Models\Instrument;
+use App\Domain\User\Models\User;
 use App\Enums\UserRole;
-use App\Models\Instrument;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

@@ -1,8 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Booking\Models;
 
+use App\Domain\Review\Models\Review;
+use App\Domain\Student\Models\StudentProfile;
+use App\Domain\Teacher\Models\TeacherProfile;
+use App\Domain\Teacher\Models\TeacherTimeSlot;
 use App\Enums\BookingStatus;
+use Database\Factories\BookingFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +17,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Booking extends Model
 {
     use HasFactory;
+
+    protected static function newFactory(): Factory
+    {
+        return BookingFactory::new();
+    }
 
     protected $fillable = [
         'teacher_profile_id',

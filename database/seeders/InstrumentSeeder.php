@@ -14,7 +14,7 @@ public function run(): void
 {
     $instruments = ['Piano', 'Guitar', 'Violin', 'Drums', 'Cello', 'Vocal'];
     foreach ($instruments as $name) {
-        \App\Models\Instrument::updateOrCreate(['name' => $name]);
+        \App\Domain\Instrument\Models\Instrument::updateOrCreate(['name' => $name]);
     }
 }
 }

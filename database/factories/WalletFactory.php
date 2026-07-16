@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\UserRole;
-use App\Models\User;
-use App\Models\Wallet;
+use App\Domain\User\Models\User;
+use App\Domain\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

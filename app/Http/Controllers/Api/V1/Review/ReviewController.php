@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api\V1\Review;
 use App\Domain\Review\Services\ReviewService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Review\StoreReviewRequest;
+use App\Http\Resources\Api\V1\ReviewResource;
 use App\Http\Responses\ApiResponse;
-use App\Models\Booking;
+use App\Domain\Booking\Models\Booking;
 use Illuminate\Http\JsonResponse;
 
 class ReviewController extends Controller
@@ -41,7 +42,7 @@ class ReviewController extends Controller
         );
 
         return $this->created(
-            data: $review,
+            data: new ReviewResource($review),
             message: 'Review submitted successfully.'
         );
     }

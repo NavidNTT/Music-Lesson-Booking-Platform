@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Booking;
 
+use App\Domain\Booking\Models\Booking;
+use App\Domain\Student\Models\StudentProfile;
+use App\Domain\Teacher\Models\TeacherProfile;
+use App\Domain\Teacher\Models\TeacherTimeSlot;
+use App\Domain\User\Models\User;
+use App\Domain\Wallet\Models\Wallet;
 use App\Enums\BookingStatus;
 use App\Enums\UserRole;
-use App\Models\Booking;
-use App\Models\StudentProfile;
-use App\Models\TeacherProfile;
-use App\Models\TeacherTimeSlot;
-use App\Models\User;
-use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

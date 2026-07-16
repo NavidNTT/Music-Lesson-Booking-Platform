@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api\V1\Student;
 
 use App\Domain\Booking\Services\BookingService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\BookingResource;
 use App\Http\Responses\ApiResponse;
-use App\Models\Booking;
+use App\Domain\Booking\Models\Booking;
+use App\Http\Requests\Api\V1\Booking\CancelBookingRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CancelBookingController extends Controller
 {
@@ -17,7 +18,7 @@ class CancelBookingController extends Controller
         protected BookingService $bookingService
     ) {}
 
-    public function __invoke(Request $request, Booking $booking): JsonResponse
+    public function __invoke(CancelBookingRequest $request, Booking $booking): JsonResponse
     {
         $student = $request->user()->studentProfile;
 
@@ -26,13 +27,15 @@ class CancelBookingController extends Controller
         }
 
         try {
+            $reason = $request->input('reason', 'Cancelled by student.');
+
             $cancelledBooking = $this->bookingService->cancelBooking(
                 $booking,
-                $request->input('reason', 'Cancelled by student.')
+                $reason
             );
 
             return $this->success(
-                data: $cancelledBooking,
+                data: new BookingResource($cancelledBooking),
                 message: 'Booking cancelled successfully.'
             );
         } catch (\Exception $e) {
