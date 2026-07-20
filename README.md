@@ -1,3 +1,6 @@
+
+<img width="1920" height="1065" alt="Untitled" src="https://github.com/user-attachments/assets/f36ce0f5-eab5-4763-a7fd-c08b4ea9a4ce" />
+
 # 🎵 Cadenza — Music Lesson Booking Platform
 
 A full-stack marketplace for private music lessons. Students discover teachers, book time slots, and pay from a built-in wallet; teachers manage their profiles, availability, and bookings; admins curate the instrument catalog.
