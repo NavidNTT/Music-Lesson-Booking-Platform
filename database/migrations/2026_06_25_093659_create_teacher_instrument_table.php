@@ -11,23 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('teacher_instrument', function (Blueprint $table) {
-    $table->id();
+        Schema::create('teacher_instrument', function (Blueprint $table) {
+            $table->id();
 
-    $table->foreignId('teacher_profile_id')
-        ->constrained()
-        ->cascadeOnDelete();
+            $table->foreignId('teacher_profile_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-    $table->foreignId('instrument_id')
-        ->constrained()
-        ->cascadeOnDelete();
+            $table->foreignId('instrument_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-    $table->json('can_teach_levels'); // ["beginner","intermediate"]
+            $table->json('can_teach_levels'); // ["beginner","intermediate"]
 
-    $table->timestamps();
+            $table->timestamps();
 
-    $table->unique(['teacher_profile_id', 'instrument_id']);
-});
+            $table->unique(['teacher_profile_id', 'instrument_id']);
+        });
     }
 
     /**

@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('student_profiles', function (Blueprint $table) {
-        $table->id();
-        // اتصال به جدول کاربران
-        $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-        
-        // فیلدهای اضافی که بعدا برای رزومه دانشجو یا علایقش لازمه
-        $table->text('bio')->nullable();
-        $table->string('phone_number')->nullable();
-        
-        $table->timestamps();
-    });
+        Schema::create('student_profiles', function (Blueprint $table) {
+            $table->id();
+            // اتصال به جدول کاربران
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            // فیلدهای اضافی که بعدا برای رزومه دانشجو یا علایقش لازمه
+            $table->text('bio')->nullable();
+            $table->string('phone_number')->nullable();
+
+            $table->timestamps();
+        });
     }
 
     /**

@@ -2,10 +2,9 @@
 
 namespace App\Domain\Review\Services;
 
-use App\Enums\BookingStatus;
-use App\Jobs\RecalculateTeacherRating;
 use App\Domain\Booking\Models\Booking;
 use App\Domain\Review\Models\Review;
+use App\Enums\BookingStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 

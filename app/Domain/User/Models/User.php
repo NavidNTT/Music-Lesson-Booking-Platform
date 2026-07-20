@@ -2,8 +2,8 @@
 
 namespace App\Domain\User\Models;
 
-use App\Domain\Teacher\Models\TeacherProfile;
 use App\Domain\Student\Models\StudentProfile;
+use App\Domain\Teacher\Models\TeacherProfile;
 use App\Domain\Wallet\Models\Wallet;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;

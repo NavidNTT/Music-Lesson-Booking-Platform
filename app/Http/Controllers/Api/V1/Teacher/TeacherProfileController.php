@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Teacher\UpdateTeacherProfileRequest;
 use App\Http\Requests\Api\V1\Teacher\SyncTeacherInstrumentsRequest;
+use App\Http\Requests\Api\V1\Teacher\UpdateTeacherProfileRequest;
 use App\Http\Resources\Api\V1\TeacherProfileResource;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +20,7 @@ class TeacherProfileController extends Controller
             ->with(['instruments', 'timeSlots'])
             ->first();
 
-        if (!$profile) {
+        if (! $profile) {
             return $this->notFound('Profile not found.');
         }
 

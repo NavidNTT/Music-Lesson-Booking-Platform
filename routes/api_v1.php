@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\Review\ReviewController;
 use App\Http\Controllers\Api\V1\Student\BookingController;
 use App\Http\Controllers\Api\V1\Student\CancelBookingController;
+use App\Http\Controllers\Api\V1\Teacher\PublicTeacherController;
 use App\Http\Controllers\Api\V1\Teacher\TeacherProfileController;
 use App\Http\Controllers\Api\V1\Teacher\TeacherTimeSlotController;
 use App\Http\Controllers\Api\V1\Wallet\DepositController;
@@ -28,6 +29,14 @@ Route::prefix('v1')
 
         Route::get('/instruments', [InstrumentController::class, 'index'])->name('instruments.index');
 
+        Route::get('/teachers', [PublicTeacherController::class, 'index'])->name('teachers.index');
+        Route::get('/teachers/{teacher}', [PublicTeacherController::class, 'show'])->name('teachers.show');
+        Route::get('/teachers/{teacher}/slots', [PublicTeacherController::class, 'slots'])->name('teachers.slots');
+
+        Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, 'verify'])
+            ->middleware(['signed', 'throttle:6,1'])
+            ->name('verification.verify');
+
         Route::post('/forgot-password', ForgotPasswordController::class)->name('password.forgot');
         Route::post('/reset-password', ResetPasswordController::class)->name('password.reset');
 
@@ -36,7 +45,6 @@ Route::prefix('v1')
             Route::get('/me', [AuthController::class, 'me'])->name('me');
             Route::patch('/me', [ProfileController::class, 'update'])->name('me.update');
 
-            Route::post('/email/verify', [VerifyEmailController::class, 'verify'])->name('verification.verify');
             Route::post('/email/resend', [VerifyEmailController::class, 'resend'])->name('verification.resend');
 
             Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');

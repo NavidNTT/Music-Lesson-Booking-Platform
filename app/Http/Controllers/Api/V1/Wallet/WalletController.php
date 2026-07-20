@@ -14,7 +14,13 @@ class WalletController extends Controller
 
     public function me(Request $request): JsonResponse
     {
-        $wallet = $request->user()->wallet()->with('transactions')->first();
+        $user = $request->user();
+
+        // Guarantee a wallet exists so the endpoint never returns a null payload
+        // that would leave the client stuck (all users get a wallet at registration,
+        // but this protects pre-existing accounts and edge cases).
+        $wallet = $user->wallet()->firstOrCreate([], ['balance' => 0]);
+        $wallet->load('transactions');
 
         return $this->success(data: new WalletResource($wallet));
     }

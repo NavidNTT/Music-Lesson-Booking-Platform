@@ -20,9 +20,9 @@ class InstrumentRequest extends FormRequest
      */
     public function rules(): array
     {
-    return [
-        'name' => ['required', 'string', 'max:50', 'unique:instruments,name,' . $this->instrument?->id],
-        'is_active' => ['sometimes', 'boolean'],
-    ];
+        return [
+            'name' => ['required', 'string', 'max:50', 'unique:instruments,name,'.$this->instrument?->id],
+            'is_active' => ['sometimes', 'boolean'],
+        ];
     }
 }

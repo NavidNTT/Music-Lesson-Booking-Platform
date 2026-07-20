@@ -2,11 +2,11 @@
 
 namespace App\Domain\Booking\Services;
 
-use App\Domain\Wallet\Services\WalletService;
-use App\Enums\BookingStatus;
 use App\Domain\Booking\Models\Booking;
 use App\Domain\Student\Models\StudentProfile;
 use App\Domain\Teacher\Models\TeacherTimeSlot;
+use App\Domain\Wallet\Services\WalletService;
+use App\Enums\BookingStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -23,7 +23,7 @@ class BookingService
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if (!$slot->is_enabled) {
+            if (! $slot->is_enabled) {
                 throw ValidationException::withMessages(['slot' => 'This time slot is disabled.']);
             }
 
@@ -54,7 +54,7 @@ class BookingService
         return DB::transaction(function () use ($booking) {
             $booking = Booking::whereKey($booking->id)->lockForUpdate()->firstOrFail();
 
-            if (!$booking->canTransitionTo(BookingStatus::Confirmed)) {
+            if (! $booking->canTransitionTo(BookingStatus::Confirmed)) {
                 throw ValidationException::withMessages([
                     'booking' => 'Only pending bookings can be confirmed.',
                 ]);
@@ -82,7 +82,7 @@ class BookingService
         return DB::transaction(function () use ($booking) {
             $booking = Booking::whereKey($booking->id)->lockForUpdate()->firstOrFail();
 
-            if (!$booking->canTransitionTo(BookingStatus::Completed)) {
+            if (! $booking->canTransitionTo(BookingStatus::Completed)) {
                 throw ValidationException::withMessages([
                     'booking' => 'Only confirmed bookings can be completed.',
                 ]);
@@ -101,7 +101,7 @@ class BookingService
         return DB::transaction(function () use ($booking, $reason) {
             $booking = Booking::whereKey($booking->id)->lockForUpdate()->firstOrFail();
 
-            if (!$booking->canTransitionTo(BookingStatus::Cancelled)) {
+            if (! $booking->canTransitionTo(BookingStatus::Cancelled)) {
                 throw ValidationException::withMessages([
                     'booking' => 'This booking cannot be cancelled.',
                 ]);

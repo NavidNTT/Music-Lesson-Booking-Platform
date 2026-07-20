@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('teacher_profiles', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')
-        ->constrained()
-        ->cascadeOnDelete()
-        ->unique();
+        Schema::create('teacher_profiles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->unique();
 
-    $table->text('bio')->nullable();
-    $table->unsignedInteger('price_per_session');
-    $table->boolean('is_active')->default(true)->index();
+            $table->text('bio')->nullable();
+            $table->unsignedInteger('price_per_session');
+            $table->boolean('is_active')->default(true)->index();
 
-    $table->decimal('rating_avg', 3, 2)->default(0);
-    $table->unsignedInteger('rating_count')->default(0);
+            $table->decimal('rating_avg', 3, 2)->default(0);
+            $table->unsignedInteger('rating_count')->default(0);
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
     }
 
     /**

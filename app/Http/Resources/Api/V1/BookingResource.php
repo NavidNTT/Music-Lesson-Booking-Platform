@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Api\V1;
 
-use App\Enums\BookingStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,7 +24,16 @@ class BookingResource extends JsonResource
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
             'teacher' => new TeacherProfileResource($this->whenLoaded('teacherProfile')),
-            'time_slot' => $this->whenLoaded('timeSlot', fn() => new TimeSlotResource($this->timeSlot)),
+            'student' => $this->whenLoaded('studentProfile', fn () => [
+                'id' => $this->studentProfile->id,
+                'user_id' => $this->studentProfile->user_id,
+                'bio' => $this->studentProfile->bio,
+                'phone' => $this->studentProfile->phone_number,
+                'user' => $this->studentProfile->relationLoaded('user')
+                    ? new UserResource($this->studentProfile->user)
+                    : null,
+            ]),
+            'time_slot' => $this->whenLoaded('timeSlot', fn () => new TimeSlotResource($this->timeSlot)),
             'review' => ReviewResource::make($this->whenLoaded('review')),
         ];
     }

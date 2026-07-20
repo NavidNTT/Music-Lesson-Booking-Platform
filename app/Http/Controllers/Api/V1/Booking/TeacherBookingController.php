@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1\Booking;
 
+use App\Domain\Booking\Models\Booking;
 use App\Domain\Booking\Services\BookingService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\BookingResource;
 use App\Http\Responses\ApiResponse;
-use App\Domain\Booking\Models\Booking;
 use Illuminate\Http\JsonResponse;
 
 class TeacherBookingController extends Controller
@@ -21,14 +21,15 @@ class TeacherBookingController extends Controller
     {
         $profile = auth()->user()->teacherProfile;
 
-        if (!$profile) {
+        if (! $profile) {
             return $this->notFound('Teacher profile not found.');
         }
 
         $bookings = Booking::where('teacher_profile_id', $profile->id)
-            ->with(['studentProfile.user', 'timeSlot'])
+            ->with(['studentProfile.user', 'timeSlot', 'review'])
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->through(fn ($booking) => new BookingResource($booking));
 
         return $this->success(data: $bookings);
     }
@@ -37,7 +38,7 @@ class TeacherBookingController extends Controller
     {
         $profile = auth()->user()->teacherProfile;
 
-        if (!$profile || $booking->teacher_profile_id !== $profile->id) {
+        if (! $profile || $booking->teacher_profile_id !== $profile->id) {
             return $this->forbidden('Unauthorized.');
         }
 
@@ -57,7 +58,7 @@ class TeacherBookingController extends Controller
     {
         $profile = auth()->user()->teacherProfile;
 
-        if (!$profile || $booking->teacher_profile_id !== $profile->id) {
+        if (! $profile || $booking->teacher_profile_id !== $profile->id) {
             return $this->forbidden('Unauthorized.');
         }
 
@@ -77,7 +78,7 @@ class TeacherBookingController extends Controller
     {
         $profile = auth()->user()->teacherProfile;
 
-        if (!$profile || $booking->teacher_profile_id !== $profile->id) {
+        if (! $profile || $booking->teacher_profile_id !== $profile->id) {
             return $this->forbidden('Unauthorized.');
         }
 

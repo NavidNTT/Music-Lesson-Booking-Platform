@@ -33,7 +33,10 @@ class TeacherTimeSlotService
             ? CarbonImmutable::parse($data['starts_at'])
             : CarbonImmutable::parse($slot->starts_at);
 
-        $duration = $data['duration_minutes'] ?? self::DEFAULT_DURATION_MINUTES;
+        // Preserve the slot's current duration unless a new one is explicitly given.
+        $currentDuration = CarbonImmutable::parse($slot->starts_at)
+            ->diffInMinutes(CarbonImmutable::parse($slot->ends_at));
+        $duration = $data['duration_minutes'] ?? $currentDuration;
         $endsAt = $startsAt->addMinutes((int) $duration);
 
         $this->ensureNoOverlap(

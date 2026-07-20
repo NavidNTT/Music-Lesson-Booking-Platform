@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-cream-100 text-ink-800 font-sans antialiased;
+  }
+
+  * {
+    @apply border-ink-200;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.02em;
+  }
+
+  /* Accessible focus ring for keyboard users */
+  :focus-visible {
+    @apply outline-none ring-2 ring-gold-400 ring-offset-2 ring-offset-cream-100;
+  }
+}
+
+@layer components {
+  .app-shell-bg {
+    background-image:
+      radial-gradient(60rem 40rem at 100% -10%, rgba(227, 171, 51, 0.08), transparent 60%),
+      radial-gradient(50rem 40rem at -10% 0%, rgba(65, 77, 112, 0.1), transparent 55%);
+  }
+
+  /* Waveform-inspired divider accent */
+  .waveform-accent {
+    background-image: repeating-linear-gradient(
+      90deg,
+      currentColor 0 2px,
+      transparent 2px 7px
+    );
+  }
+}
+
+.skeleton {
+  @apply relative overflow-hidden bg-ink-100/70;
+}
+
+.skeleton::after {
+  @apply absolute inset-0;
+  content: '';
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

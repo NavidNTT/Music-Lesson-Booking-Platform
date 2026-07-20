@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\V1\Auth;
 
 use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
@@ -20,7 +20,7 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'min:2', 'max:100'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(8)],
-            'role' => ['sometimes', new Enum(UserRole::class)],
+            'role' => ['sometimes', Rule::in([UserRole::Student->value, UserRole::Teacher->value])],
         ];
     }
 }

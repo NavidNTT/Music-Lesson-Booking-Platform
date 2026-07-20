@@ -3,13 +3,12 @@
 namespace App\Domain\Wallet\Services;
 
 use App\Domain\User\Models\User;
-use App\Domain\Wallet\Models\WalletTransaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class WalletService
 {
-    public function deposit(User $user, float $amount, string $description = null): void
+    public function deposit(User $user, float $amount, ?string $description = null): void
     {
         DB::transaction(function () use ($user, $amount, $description) {
             $wallet = $user->wallet()->lockForUpdate()->firstOrFail();
@@ -25,7 +24,7 @@ class WalletService
         });
     }
 
-    public function withdraw(User $user, float $amount, string $description = null): void
+    public function withdraw(User $user, float $amount, ?string $description = null): void
     {
         DB::transaction(function () use ($user, $amount, $description) {
             $wallet = $user->wallet()->lockForUpdate()->firstOrFail();
@@ -66,7 +65,7 @@ class WalletService
                 'reference_type' => 'Booking',
                 'reference_id' => $bookingId,
                 'status' => 'success',
-                'description' => 'Payment for booking #' . $bookingId,
+                'description' => 'Payment for booking #'.$bookingId,
             ]);
         });
     }
@@ -84,7 +83,7 @@ class WalletService
                 'reference_type' => 'Booking',
                 'reference_id' => $bookingId,
                 'status' => 'success',
-                'description' => 'Refund for cancelled booking #' . $bookingId,
+                'description' => 'Refund for cancelled booking #'.$bookingId,
             ]);
         });
     }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Domain\User\Models\User;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
 use App\Http\Resources\Api\V1\UserResource;
 use App\Http\Responses\ApiResponse;
-use App\Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +29,10 @@ class AuthController extends Controller
         ]);
 
         $user->wallet()->create(['balance' => 0]);
+
+        if ($user->isStudent()) {
+            $user->studentProfile()->create([]);
+        }
 
         $token = $user->createToken($request->input('device_name', 'api-token'))->plainTextToken;
 

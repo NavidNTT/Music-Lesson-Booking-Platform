@@ -18,13 +18,13 @@ class SyncTeacherInstrumentsRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-public function rules(): array
-{
-    return [
-        'instruments' => ['required', 'array'],
-        'instruments.*.id' => ['required', 'exists:instruments,id'],
-        'instruments.*.levels' => ['required', 'array'],
-        'instruments.*.levels.*' => ['in:beginner,intermediate,advanced'],
-    ];
-}
+    public function rules(): array
+    {
+        return [
+            'instruments' => ['required', 'array'],
+            'instruments.*.id' => ['required', 'exists:instruments,id'],
+            'instruments.*.levels' => ['required', 'array'],
+            'instruments.*.levels.*' => ['in:beginner,intermediate,advanced'],
+        ];
+    }
 }

@@ -23,7 +23,7 @@ class BookingController extends Controller
 
         $student = auth()->user()->studentProfile;
 
-        if (!$student) {
+        if (! $student) {
             return $this->notFound('Student profile not found.');
         }
 
@@ -43,9 +43,10 @@ class BookingController extends Controller
         $bookings = auth()->user()
             ->studentProfile
             ->bookings()
-            ->with(['teacherProfile.user', 'timeSlot'])
+            ->with(['teacherProfile.user', 'timeSlot', 'review'])
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->through(fn ($booking) => new BookingResource($booking));
 
         return $this->success(data: $bookings);
     }

@@ -14,7 +14,7 @@ class InstrumentFactory extends Factory
     {
         $name = $this->faker->unique()->randomElement([
             'Piano', 'Guitar', 'Violin', 'Drums', 'Cello',
-        ]) . ' ' . $this->faker->unique()->numberBetween(1, 999);
+        ]).' '.$this->faker->unique()->numberBetween(1, 999);
 
         return [
             'name' => $name,

@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('reviews', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('booking_id')->unique()->constrained()->cascadeOnDelete();
-        $table->foreignId('teacher_profile_id')->constrained()->cascadeOnDelete();
-        $table->foreignId('student_profile_id')->constrained()->cascadeOnDelete();
-        $table->tinyInteger('rating')->unsigned(); // 1 to 5
-        $table->text('comment')->nullable();
-        $table->timestamps();
-    });
+        Schema::create('reviews', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('booking_id')->unique()->constrained()->cascadeOnDelete();
+            $table->foreignId('teacher_profile_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('student_profile_id')->constrained()->cascadeOnDelete();
+            $table->tinyInteger('rating')->unsigned(); // 1 to 5
+            $table->text('comment')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('wallet_transactions', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('wallet_id')->constrained()->cascadeOnDelete();
-        $table->string('type'); // deposit, withdraw, payment, refund
-        $table->decimal('amount', 12, 2);
-        $table->string('reference_type')->nullable(); // Booking, manual, etc
-        $table->unsignedBigInteger('reference_id')->nullable();
-        $table->string('status')->default('success'); // success, failed, pending
-        $table->text('description')->nullable();
-        $table->timestamps();
-    });
+        Schema::create('wallet_transactions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('wallet_id')->constrained()->cascadeOnDelete();
+            $table->string('type'); // deposit, withdraw, payment, refund
+            $table->decimal('amount', 12, 2);
+            $table->string('reference_type')->nullable(); // Booking, manual, etc
+            $table->unsignedBigInteger('reference_id')->nullable();
+            $table->string('status')->default('success'); // success, failed, pending
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

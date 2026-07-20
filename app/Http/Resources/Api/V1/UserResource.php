@@ -2,12 +2,13 @@
 
 namespace App\Http\Resources\Api\V1;
 
+use App\Domain\User\Models\User;
 use BackedEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Domain\User\Models\User
+ * @mixin User
  */
 class UserResource extends JsonResource
 {

@@ -24,16 +24,18 @@ class CancelBookingRequest extends FormRequest
         $validator->after(function ($validator) {
             $booking = $this->route('booking');
 
-            if (!$booking) {
+            if (! $booking) {
                 $validator->errors()->add('booking', 'Booking not found.');
+
                 return;
             }
 
-            if (!$booking->canTransitionTo(BookingStatus::Cancelled)) {
+            if (! $booking->canTransitionTo(BookingStatus::Cancelled)) {
                 $validator->errors()->add(
                     'booking',
                     'This booking cannot be cancelled in its current state.'
                 );
+
                 return;
             }
 
@@ -44,6 +46,7 @@ class CancelBookingRequest extends FormRequest
                     'booking',
                     'Cannot cancel a booking for a lesson that has already started.'
                 );
+
                 return;
             }
 

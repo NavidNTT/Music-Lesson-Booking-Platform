@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1\Teacher;
 
+use App\Domain\Teacher\Models\TeacherTimeSlot;
 use App\Domain\Teacher\Services\TeacherTimeSlotService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Teacher\StoreTeacherTimeSlotRequest;
 use App\Http\Requests\Api\V1\Teacher\UpdateTeacherTimeSlotRequest;
 use App\Http\Resources\Api\V1\TimeSlotResource;
 use App\Http\Responses\ApiResponse;
-use App\Domain\Teacher\Models\TeacherTimeSlot;
 use Illuminate\Http\JsonResponse;
 
 class TeacherTimeSlotController extends Controller
@@ -29,7 +29,8 @@ class TeacherTimeSlotController extends Controller
 
         $slots = $profile->timeSlots()
             ->orderBy('starts_at')
-            ->paginate(20);
+            ->paginate(20)
+            ->through(fn ($slot) => new TimeSlotResource($slot));
 
         return $this->success(data: $slots);
     }
