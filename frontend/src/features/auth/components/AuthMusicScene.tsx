@@ -1,57 +1,59 @@
-import { Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useState, useEffect } from "react";
+import { Canvas } from "@react-three/fiber";
 import { Environment, Float, OrbitControls, useGLTF } from "@react-three/drei";
-import * as THREE from "three";
+import { PianoModel } from "./3d/PianoModel";
+import { ViolinModel } from "./3d/ViolinModel";
 
-function Piano() {
-    const { scene } = useGLTF("/models/piano.glb");
-    const ref = useRef<THREE.Group>(null);
+/**
+ * Breakpoints match Tailwind: sm=640, md=768, lg=1024, xl=1280.
+ * Each entry defines the [pianoPos, pianoScale, violinPos, violinScale]
+ * for visual balance at that viewport width.
+ */
+const useResponsiveLayout = () => {
+    const [breakpoint, setBreakpoint] = useState<"sm" | "md" | "lg" | "xl">("lg");
 
-    useFrame((state) => {
-        if (!ref.current) return;
+    useEffect(() => {
+        const update = () => {
+            const w = window.innerWidth;
+            if (w < 640) setBreakpoint("sm");
+            else if (w < 768) setBreakpoint("md");
+            else if (w < 1024) setBreakpoint("lg");
+            else setBreakpoint("xl");
+        };
+        update();
+        window.addEventListener("resize", update);
+        return () => window.removeEventListener("resize", update);
+    }, []);
 
-        ref.current.rotation.y =
-            Math.sin(state.clock.elapsedTime * 0.35) * 0.035;
-    });
+    const layouts = {
+        // Mobile — smaller, single column feel
+        sm: {
+            piano: { pos: [0, 1.8, 0] as [number, number, number], scale: 0.03 },
+            violin: { pos: [0, -1.8, 0] as [number, number, number], scale: 2.8 },
+        },
+        // Tablet
+        md: {
+            piano: { pos: [-2, 2, 0] as [number, number, number], scale: 0.035 },
+            violin: { pos: [2, -2, 0] as [number, number, number], scale: 3.0 },
+        },
+        // Default (laptop) — balanced
+        lg: {
+            piano: { pos: [-2, 2.5, 0] as [number, number, number], scale: 0.04 },
+            violin: { pos: [2, -2.5, 0] as [number, number, number], scale: 3.5 },
+        },
+        // Desktop — slightly larger canvas
+        xl: {
+            piano: { pos: [-2.2, 2.8, 0] as [number, number, number], scale: 0.042 },
+            violin: { pos: [2.2, -2.8, 0] as [number, number, number], scale: 3.8 },
+        },
+    };
 
-    return (
-        <Float speed={0.7} rotationIntensity={0.08} floatIntensity={0.15}>
-            <primitive
-                ref={ref}
-                object={scene}
-                scale={1.6}
-                position={[0, -2.1, -0.8]}
-                rotation={[0, -0.35, 0]}
-            />
-        </Float>
-    );
-}
-
-function Violin() {
-    const { scene } = useGLTF("/models/violin.glb");
-    const ref = useRef<THREE.Group>(null);
-
-    useFrame((state) => {
-        if (!ref.current) return;
-
-        ref.current.rotation.z =
-            Math.sin(state.clock.elapsedTime * 0.4 + 1) * 0.03;
-    });
-
-    return (
-        <Float speed={0.75} rotationIntensity={0.1} floatIntensity={0.18}>
-            <primitive
-                ref={ref}
-                object={scene}
-                scale={1.5}
-                position={[-2.7, 1.2, 0.5]}
-                rotation={[0.2, 0.45, -0.35]}
-            />
-        </Float>
-    );
-}
+    return layouts[breakpoint];
+};
 
 function SceneContent() {
+    const layout = useResponsiveLayout();
+
     return (
         <>
             <ambientLight intensity={0.8} />
@@ -65,8 +67,25 @@ function SceneContent() {
             <Suspense fallback={null}>
                 <Environment preset="studio" />
 
-                <Piano />
-                <Violin />
+                {/* Piano — positioned toward upper area */}
+                <Float speed={0.7} rotationIntensity={0.08} floatIntensity={0.15}>
+                    <group position={layout.piano.pos}>
+                        <PianoModel
+                            scale={layout.piano.scale}
+                            spinIntensity={0.035}
+                        />
+                    </group>
+                </Float>
+
+                {/* Violin — positioned toward lower area */}
+                <Float speed={0.75} rotationIntensity={0.1} floatIntensity={0.18}>
+                    <group position={layout.violin.pos}>
+                        <ViolinModel
+                            scale={layout.violin.scale}
+                            spinIntensity={0.03}
+                        />
+                    </group>
+                </Float>
             </Suspense>
 
             <OrbitControls

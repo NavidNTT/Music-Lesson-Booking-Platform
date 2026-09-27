@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v '`')",
+      "Bash(iconv -f UTF-8 -t UTF-8 client.ts)",
+      "Bash(iconv -f UTF-8 -t UTF-8 src/shared/api/client.ts)",
+      "Bash(curl -s -o /tmp/client-out.js -w \"HTTP %{http_code}\\\\n\" \"http://localhost:5173/src/shared/api/client.ts\")",
+      "Read(//tmp/**)",
+      "Bash(php -m)",
+      "Bash(npx eslint *)",
+      "Bash(npx vitest *)",
+      "Bash(php artisan *)",
+      "Bash(php -r 'require \"vendor/autoload.php\"; $a=require \"bootstrap/app.php\"; $a->make\\(Illuminate\\\\Contracts\\\\Console\\\\Kernel::class\\)->bootstrap\\(\\); echo \"cache=\".config\\(\"cache.default\"\\).\" queue=\".config\\(\"queue.default\"\\).\" refresh_days=\".config\\(\"sanctum.refresh_window_days\"\\).\" cors=\".implode\\(\"|\",config\\(\"cors.allowed_origins\"\\)\\).\"\\\\n\";')",
+      "Bash(php -r 'require \"vendor/autoload.php\"; $a=require \"bootstrap/app.php\"; $a->make\\(Illuminate\\\\Contracts\\\\Console\\\\Kernel::class\\)->bootstrap\\(\\); echo \"cache=\".config\\(\"cache.default\"\\).\" | queue=\".config\\(\"queue.default\"\\).\" | refresh_days=\".config\\(\"sanctum.refresh_window_days\"\\).\" | cors=\".implode\\(\",\",config\\(\"cors.allowed_origins\"\\)\\).\"\\\\n\";')"
+    ]
+  }
+}

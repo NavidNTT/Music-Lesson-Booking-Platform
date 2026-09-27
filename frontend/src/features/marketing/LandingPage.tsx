@@ -5,6 +5,7 @@ import { useInstruments } from '@/features/instruments/hooks';
 import { useTeachers } from '@/features/teachers/hooks';
 import { TeacherCard } from '@/features/teachers/components/TeacherCard';
 import { CardSkeleton } from '@/shared/ui/Skeleton';
+import { HeroMusicScene } from './components/HeroMusicScene';
 
 const steps = [
   {
@@ -40,6 +41,7 @@ export function LandingPage() {
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden bg-ink-950">
+        <HeroMusicScene />
         <div
           className="absolute inset-0 opacity-50"
           style={{
@@ -48,7 +50,7 @@ export function LandingPage() {
           }}
           aria-hidden
         />
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28">
+        <div className="relative z-10 mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full bg-ink-800/70 px-3 py-1 text-xs font-medium text-gold-300">
               <Sparkles className="h-3.5 w-3.5" aria-hidden />
